@@ -44,10 +44,10 @@ export default defineConfig({
     port: 5173,
     proxy: {
       // Forward API calls to the Fastify backend during development.
+      // The backend serves everything under /api, so the prefix is kept as-is.
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },

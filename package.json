@@ -15,7 +15,9 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "db:migrate": "npm run migrate --workspace backend",
     "db:seed": "npm run seed --workspace backend",
-    "db:reset": "npm run reset --workspace backend"
+    "db:reset": "npm run reset --workspace backend",
+    "start": "npm run start --workspace backend",
+    "serve": "npm run build && npm run start --workspace backend"
   },
   "engines": {
     "node": ">=20"

@@ -37,8 +37,14 @@ git --version
 
 ## 2. Récupérer le code
 
-Placez-vous dans un dossier de travail, puis :
+**Option 1 — Télécharger le ZIP (sans git, le plus simple)**
+1. Ouvrez la page du projet sur GitHub (branche `claude/intelligent-thompson-i01mpw`).
+2. Bouton vert **« Code » → « Download ZIP »**.
+3. Faites un clic droit sur le ZIP téléchargé → **« Extraire tout »** (par ex. sur le Bureau).
+4. Vous obtenez un dossier `gestion-de-stock` : c'est là que se trouvent les fichiers
+   `Comptoir - Installer.bat` et `Comptoir - Demarrer.bat`.
 
+**Option 2 — Avec git (pour recevoir les mises à jour facilement)**
 ```bash
 git clone https://github.com/berty280/gestion-de-stock.git
 cd gestion-de-stock
@@ -93,23 +99,33 @@ Vous devez voir s'afficher la liste des comptes créés.
 
 ## 5. Lancer l'application
 
-Ouvrez **deux terminaux** dans le dossier `gestion-de-stock`.
+### 5.A Méthode simple (recommandée, Windows) 👍
 
-**Terminal 1 — l'API (backend) :**
+Aucune commande à taper. Dans le dossier `gestion-de-stock` :
+
+1. **La première fois seulement** : double-cliquez sur
+   **`Comptoir - Installer (1 fois).bat`** et laissez-le finir (« Installation terminée »).
+2. **Chaque jour** : double-cliquez sur **`Comptoir - Demarrer.bat`**.
+   - Le serveur démarre **en arrière-plan** (fenêtre cachée) et le navigateur
+     s'ouvre tout seul sur l'application.
+3. Pour **arrêter** : double-cliquez sur **`Comptoir - Arreter.bat`**.
+
+> 💡 Astuce : faites un clic droit sur `Comptoir - Demarrer.bat` →
+> « Envoyer vers » → « Bureau (créer un raccourci) » pour avoir une icône sur le
+> Bureau. Vous pouvez la renommer « Comptoir » et changer son icône.
+
+Tout tourne sur **une seule adresse** : <http://localhost:3000> (interface **et** données).
+
+### 5.B Méthode manuelle (développement)
+
+Pour développer/modifier le code, avec rechargement automatique, ouvrez **deux
+terminaux** :
+
 ```bash
-npm run dev:backend
+npm run dev:backend    # API sur http://localhost:3000
+npm run dev:frontend   # Interface sur http://localhost:5173 (à ouvrir dans le navigateur)
 ```
-→ API sur <http://localhost:3000> (laisser tourner).
 
-**Terminal 2 — l'interface (frontend) :**
-```bash
-npm run dev:frontend
-```
-→ Interface sur <http://localhost:5173> (laisser tourner).
-
-Ouvrez ensuite **<http://localhost:5173>** dans votre navigateur (Chrome recommandé).
-
-> Sur la page d'accueil (tableau de bord Admin), l'état de l'API doit être « ok ».
 > `localhost` est un contexte sécurisé : **la caméra fonctionne** sans HTTPS.
 
 ---

@@ -25,6 +25,8 @@ export const config = {
     .map((o) => o.trim())
     .filter(Boolean),
   databasePath: resolvePath(env('DATABASE_PATH', './data/comptoir.db')),
+  // Built frontend served by the backend in single-port mode (empty string disables it).
+  frontendDist: resolvePath(env('FRONTEND_DIST', '../frontend/dist')),
   jwtSecret: env('JWT_SECRET', 'change-me-in-production'),
   seedDefaultPassword: env('SEED_DEFAULT_PASSWORD', 'comptoir123'),
   smtp: {

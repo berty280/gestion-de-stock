@@ -106,6 +106,18 @@ Comptes de démo créés par le seed (mot de passe = `SEED_DEFAULT_PASSWORD`,
 
 > ⚠️ Comptes et mots de passe de démonstration — à changer en production.
 
+## Lancement simple (Windows, sans commande)
+
+Pour un usage « boutique », des lanceurs sont fournis à la racine :
+
+- **`Comptoir - Installer (1 fois).bat`** — installe, construit et initialise (une fois).
+- **`Comptoir - Demarrer.bat`** — démarre le serveur **en arrière-plan** et ouvre le
+  navigateur sur l'application. Idéal en raccourci sur le Bureau.
+- **`Comptoir - Arreter.bat`** — arrête le serveur.
+
+En mode « lancé », **tout est servi sur un seul port** : <http://localhost:3000>
+(interface **et** API). Voir [`docs/GUIDE_TEST.md`](docs/GUIDE_TEST.md).
+
 ## Développement
 
 ```bash
@@ -113,8 +125,14 @@ npm run dev:backend       # API sur http://localhost:3000
 npm run dev:frontend      # PWA sur http://localhost:5173 (proxy /api → :3000)
 ```
 
-La page d'accueil affiche l'état de l'API (`/api/health`). Le backend applique
-automatiquement les migrations au démarrage.
+En production / usage simple, le backend sert aussi la PWA compilée
+(`frontend/dist`) : un seul port, l'API sous `/api`.
+
+```bash
+npm run serve             # build + démarrage sur http://localhost:3000 (interface + API)
+```
+
+Le backend applique automatiquement les migrations au démarrage.
 
 > **HTTPS requis pour la caméra** : l'accès caméra du navigateur exige un contexte
 > sécurisé (HTTPS ou `localhost`). En production, servir la PWA derrière HTTPS.
