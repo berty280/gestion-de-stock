@@ -8,15 +8,15 @@ Logiciel simplifié de gestion de stock et de traçabilité pour une boutique
 
 ## État d'avancement
 
-Ce dépôt correspond à l'**étape 1** du plan de build (§9 du spec) :
+MVP complet — les 7 étapes du plan de build (§9 du spec) sont implémentées :
 
 - [x] **1. Scaffold** — monorepo front + back, schéma DB + migrations, seed users/rôles
-- [ ] 2. Auth + rôles + garde des routes
-- [ ] 3. Catalogue produits + résolution GTIN (API + cache + manuel)
-- [ ] 4. Écran de scan 3 modes → mouvements + stock_levels
-- [ ] 5. Vente (panier + client + facture)
-- [ ] 6. Seuils, alertes in-app, email de recommande
-- [ ] 7. Rapports + install PWA
+- [x] **2. Auth + rôles + garde des routes** — email/mot de passe (bcrypt), JWT, RBAC
+- [x] **3. Catalogue produits + résolution GTIN** — Open Beauty Facts + cache local + saisie manuelle
+- [x] **4. Écran de scan 3 modes** — Réception / Réappro / Vente → mouvements + stock_levels
+- [x] **5. Vente** — panier + client (nommé ou inconnu) + reçu imprimable
+- [x] **6. Seuils, alertes in-app, email de recommande** — VITRINE_LOW / STOCK_LOW, auto-résolution
+- [x] **7. Rapports** (stock courant, mouvements, ventes du jour) + PWA installable
 
 ## Architecture
 
@@ -27,17 +27,51 @@ comptoir/
 ├── backend/     API Fastify + TypeScript, SQLite (better-sqlite3)
 │   └── src/
 │       ├── config.ts            configuration (.env)
-│       ├── server.ts            construction du serveur Fastify
+│       ├── server.ts            serveur Fastify + enregistrement des routes
 │       ├── index.ts             point d'entrée (migrate au boot + listen)
-│       └── db/
-│           ├── connection.ts    connexion SQLite partagée
-│           ├── migrate.ts       exécuteur de migrations
-│           ├── seed.ts          seed users/rôles (idempotent)
-│           ├── reset.ts         reset dev (drop + migrate + seed)
-│           └── migrations/*.sql schéma
+│       ├── auth/                JWT + garde des rôles, /auth/login, /auth/me
+│       ├── routes/              products, customers, operations, sales,
+│       │                        alerts, users, reports
+│       ├── services/            stock (mouvements + alertes), gtin, email
+│       ├── lib/                 errors, roles, validate (zod)
+│       └── db/                  connection, migrate, seed, reset, migrations
 ├── frontend/    PWA React + Vite + TypeScript + Tailwind
+│   └── src/
+│       ├── auth/                AuthContext (session JWT)
+│       ├── components/          Layout, BarcodeScanner, ui, Modal, Toast…
+│       ├── pages/               Login, Dashboard, Vente, Reception, Reappro,
+│       │                        Produits, Clients, Alertes, Rapports, Users
+│       └── lib/                 api client, types, hooks, roles
 └── docs/SPEC.md
 ```
+
+### Fonctionnalités
+
+- **3 rôles** (Operator / Admin / Supervisor) avec permissions gardées côté API et UI.
+- **3 modes de scan** : Réception (Stock +N, crée la fiche si GTIN inconnu),
+  Réappro (Stock → Vitrine), Vente (panier → Vitrine −N).
+- **Résolution GTIN** : cache local d'abord, puis Open Beauty Facts, sinon saisie
+  manuelle. Le scanner lit EAN-13 et GS1 DataMatrix (extraction du GTIN).
+- **Ventes** rattachées à un client (nom + téléphone, ou « Inconnu ») + reçu imprimable.
+- **Seuils & alertes** : VITRINE_LOW (in-app) et STOCK_LOW (in-app + email fournisseur),
+  sans doublon, avec **auto-résolution** au réapprovisionnement.
+- **Ajustements** (Supervisor) et **rapports** (stock courant, mouvements, ventes du jour).
+- **Idempotence** des scans via `scan_uid`.
+
+### Principales routes API
+
+| Méthode | Route | Rôle min |
+|---|---|---|
+| POST | `/auth/login`, GET `/auth/me` | public / auth |
+| GET | `/products`, `/products/:id`, `/products/lookup/:gtin` | auth |
+| POST/PATCH | `/products` | Admin |
+| GET/POST/PATCH/DELETE | `/customers` | auth |
+| POST | `/operations/reception`, `/operations/reappro` | Admin |
+| POST | `/operations/adjustment` | Supervisor |
+| POST | `/sales`, GET `/sales/:id` | auth |
+| GET | `/alerts`, `/alerts/count`; POST `/alerts/:id/resolve` | Admin / Supervisor |
+| GET/POST/PATCH | `/users` | Supervisor |
+| GET | `/reports/stock`, `/reports/movements`, `/reports/sales` | Admin |
 
 ## Prérequis
 

@@ -10,7 +10,7 @@ async function main(): Promise<void> {
     console.log(`Applied migrations on boot: ${applied.join(', ')}`);
   }
 
-  const app = buildServer();
+  const app = await buildServer();
 
   const shutdown = async (signal: string) => {
     app.log.info(`Received ${signal}, shutting down...`);
