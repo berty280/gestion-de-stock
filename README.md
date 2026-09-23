@@ -5,6 +5,7 @@ Logiciel simplifié de gestion de stock et de traçabilité pour une boutique
 (PC + Android) avec scan de code-barres, adossée à une API Node/Fastify + SQLite.
 
 > Spécification complète : [`docs/SPEC.md`](docs/SPEC.md).
+> Guide de test pas-à-pas : [`docs/GUIDE_TEST.md`](docs/GUIDE_TEST.md).
 
 ## État d'avancement
 
