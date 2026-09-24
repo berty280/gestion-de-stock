@@ -32,7 +32,13 @@ taskkill /F /IM node.exe >nul 2>nul
 
 echo.
 echo [2/4] Recuperation de la derniere version...
-call git pull
+rem Branche courante.
+for /f "delims=" %%b in ('git rev-parse --abbrev-ref HEAD') do set "BR=%%b"
+call git fetch origin
+if errorlevel 1 goto erreur
+rem Force la version du depot (les fichiers locaux versionnes, ex. package-lock.json,
+rem sont remis a l'identique). Les donnees (base, .env) sont ignorees par git : intactes.
+call git reset --hard origin/%BR%
 if errorlevel 1 goto erreur
 
 echo.
