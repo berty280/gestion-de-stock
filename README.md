@@ -114,6 +114,8 @@ Pour un usage « boutique », des lanceurs sont fournis à la racine :
 - **`Comptoir - Demarrer.bat`** — démarre le serveur **en arrière-plan** et ouvre le
   navigateur sur l'application. Idéal en raccourci sur le Bureau.
 - **`Comptoir - Arreter.bat`** — arrête le serveur.
+- **`Comptoir - Mettre a jour.bat`** — récupère la dernière version (git pull),
+  réinstalle et reconstruit (les données existantes sont conservées).
 
 En mode « lancé », **tout est servi sur un seul port** : <http://localhost:3000>
 (interface **et** API). Voir [`docs/GUIDE_TEST.md`](docs/GUIDE_TEST.md).

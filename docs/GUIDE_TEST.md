@@ -109,6 +109,9 @@ Aucune commande à taper. Dans le dossier `gestion-de-stock` :
    - Le serveur démarre **en arrière-plan** (fenêtre cachée) et le navigateur
      s'ouvre tout seul sur l'application.
 3. Pour **arrêter** : double-cliquez sur **`Comptoir - Arreter.bat`**.
+4. Pour **mettre à jour** (nouvelle version) : double-cliquez sur
+   **`Comptoir - Mettre a jour.bat`** (nécessite git ; vos données sont conservées).
+   Si vous aviez téléchargé un ZIP, retéléchargez simplement le ZIP à jour.
 
 > 💡 Astuce : faites un clic droit sur `Comptoir - Demarrer.bat` →
 > « Envoyer vers » → « Bureau (créer un raccourci) » pour avoir une icône sur le
