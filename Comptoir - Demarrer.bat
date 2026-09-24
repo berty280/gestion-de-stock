@@ -4,41 +4,40 @@ title Demarrage de Comptoir
 cd /d "%~dp0"
 
 where node >nul 2>nul
-if errorlevel 1 (
-  echo [ERREUR] Node.js n'est pas installe. Voir https://nodejs.org
-  pause
-  exit /b 1
-)
+if errorlevel 1 goto noNode
 
-rem --- Premiere utilisation : installer/construire si necessaire ---
-if not exist "node_modules" (
-  echo Premiere utilisation : installation en cours...
-  call npm install || goto erreur
-)
-if not exist "frontend\dist" (
-  echo Construction de l'application...
-  call npm run build || goto erreur
-)
+rem --- Premiere utilisation : installer / construire si necessaire ---
+if exist "node_modules" goto haveModules
+echo Premiere utilisation : installation en cours...
+call npm install
+if errorlevel 1 goto erreur
+:haveModules
+
+if exist "frontend\dist" goto haveDist
+echo Construction de l'application...
+call npm run build
+if errorlevel 1 goto erreur
+:haveDist
+
 if not exist "backend\.env" copy "backend\.env.example" "backend\.env" >nul
-if not exist "backend\data\comptoir.db" (
-  echo Initialisation de la base de donnees...
-  call npm run db:migrate
-  call npm run db:seed
-)
+
+if exist "backend\data\comptoir.db" goto haveDb
+echo Initialisation de la base de donnees...
+call npm run db:migrate
+call npm run db:seed
+:haveDb
 
 rem --- Si Comptoir tourne deja, on ouvre juste le navigateur ---
 curl -s -o nul http://localhost:3000/api/health
-if not errorlevel 1 (
-  start "" http://localhost:3000
-  exit /b 0
-)
+if errorlevel 1 goto startServer
+start "" http://localhost:3000
+exit /b 0
 
-rem --- Lancer le serveur en arriere-plan (fenetre cachee) ---
+:startServer
 echo Demarrage de Comptoir en arriere-plan...
 > "%TEMP%\comptoir_start.vbs" echo CreateObject("WScript.Shell").Run "cmd /c cd /d ""%CD%"" ^&^& npm run start", 0, False
 cscript //nologo "%TEMP%\comptoir_start.vbs" >nul
 
-rem --- Attendre que le serveur reponde, puis ouvrir le navigateur ---
 echo Veuillez patienter...
 setlocal enabledelayedexpansion
 set /a n=0
@@ -58,7 +57,12 @@ exit /b 0
 
 :tropLong
 echo [ERREUR] Le serveur met trop de temps a demarrer.
-echo Ouvrez quand meme http://localhost:3000 dans votre navigateur, ou relancez ce fichier.
+echo Ouvrez http://localhost:3000 dans votre navigateur, ou relancez ce fichier.
+pause
+exit /b 1
+
+:noNode
+echo [ERREUR] Node.js n'est pas installe. Voir https://nodejs.org
 pause
 exit /b 1
 
