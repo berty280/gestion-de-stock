@@ -34,9 +34,10 @@ start "" http://localhost:3000
 exit /b 0
 
 :startServer
-echo Demarrage de Comptoir en arriere-plan...
-> "%TEMP%\comptoir_start.vbs" echo CreateObject("WScript.Shell").Run "cmd /c cd /d ""%CD%"" ^&^& npm run start", 0, False
-cscript //nologo "%TEMP%\comptoir_start.vbs" >nul
+echo Demarrage de Comptoir...
+rem Lance le serveur dans une fenetre minimisee dediee (fiable).
+rem Ne pas fermer cette fenetre "Comptoir (serveur)" tant que vous utilisez l'application.
+start "Comptoir (serveur - ne pas fermer)" /min cmd /c "cd /d ""%CD%"" && npm run start"
 
 echo Veuillez patienter...
 setlocal enabledelayedexpansion
@@ -45,19 +46,21 @@ set /a n=0
 set /a n+=1
 curl -s -o nul http://localhost:3000/api/health
 if not errorlevel 1 goto pret
-if !n! GEQ 40 goto tropLong
+if !n! GEQ 60 goto tropLong
 >nul ping -n 2 127.0.0.1
 goto attendre
 
 :pret
 start "" http://localhost:3000
-echo Comptoir est demarre. Vous pouvez fermer cette fenetre.
-timeout /t 3 >nul
+echo Comptoir est demarre. Vous pouvez fermer CETTE fenetre.
+echo (La petite fenetre "Comptoir (serveur)" minimisee doit rester ouverte.)
+timeout /t 4 >nul
 exit /b 0
 
 :tropLong
 echo [ERREUR] Le serveur met trop de temps a demarrer.
-echo Ouvrez http://localhost:3000 dans votre navigateur, ou relancez ce fichier.
+echo Regardez la fenetre minimisee "Comptoir (serveur)" pour un eventuel message d'erreur,
+echo ou ouvrez http://localhost:3000 dans votre navigateur.
 pause
 exit /b 1
 
