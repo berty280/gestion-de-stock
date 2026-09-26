@@ -1,0 +1,28 @@
+@import 'tailwindcss';
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* When printing a receipt, hide the app chrome. */
+@media print {
+  header,
+  nav,
+  button {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+}
