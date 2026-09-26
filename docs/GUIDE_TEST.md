@@ -112,6 +112,11 @@ Aucune commande à taper. Dans le dossier `gestion-de-stock` :
 4. Pour **mettre à jour** (nouvelle version) : double-cliquez sur
    **`Comptoir - Mettre a jour.bat`** (nécessite git ; vos données sont conservées).
    Si vous aviez téléchargé un ZIP, retéléchargez simplement le ZIP à jour.
+5. Pour un **démarrage automatique au lancement de Windows** (idéal en boutique) :
+   double-cliquez **une fois** sur **`Comptoir - Activer demarrage auto.bat`**.
+   Le serveur se lancera alors tout seul à chaque démarrage du PC ; il ne reste
+   qu'à ouvrir `http://localhost:3000` (ou `Comptoir - Demarrer`).
+   Pour l'annuler : **`Comptoir - Desactiver demarrage auto.bat`**.
 
 > 💡 Astuce : faites un clic droit sur `Comptoir - Demarrer.bat` →
 > « Envoyer vers » → « Bureau (créer un raccourci) » pour avoir une icône sur le

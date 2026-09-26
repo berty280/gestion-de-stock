@@ -116,6 +116,9 @@ Pour un usage « boutique », des lanceurs sont fournis à la racine :
 - **`Comptoir - Arreter.bat`** — arrête le serveur.
 - **`Comptoir - Mettre a jour.bat`** — récupère la dernière version (git pull),
   réinstalle et reconstruit (les données existantes sont conservées).
+- **`Comptoir - Activer demarrage auto.bat`** / **`Comptoir - Desactiver demarrage auto.bat`**
+  — lance (ou non) le serveur automatiquement au démarrage de Windows (dossier
+  Démarrage utilisateur ; sans droits admin).
 
 En mode « lancé », **tout est servi sur un seul port** : <http://localhost:3000>
 (interface **et** API). Voir [`docs/GUIDE_TEST.md`](docs/GUIDE_TEST.md).
